@@ -1,7 +1,7 @@
 # 152638_PaymentWallet_Phase1
-==================================
-Parallel Project by Vikash Kumar 
-==================================
+
+PARALLEL PROJECT BY VIKASH KUMAR
+
 OBJECTIVE 
 ----------
 Development of online payment wallet system of XYZ bank.

@@ -1,7 +1,8 @@
 package com.cg_152638.pwp1.repo;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,10 @@ public class PaymentWalletRepoImpl implements IPaymentRepo {
 		boolean result = false;
 		if (customerMap.get(newCustomer.getMobileNumber()) == null) {
 			customerMap.put(newCustomer.getMobileNumber(), newCustomer);
-			StringBuilder builder = new StringBuilder("Account Created on \t" + LocalDateTime.now()
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy hh:mm a");
+			String strDate = sdf.format(date);
+			StringBuilder builder = new StringBuilder("Account Created on \t" + strDate
 					+ "\n--------------------------------------------------------------------------\n"
 					+ String.format("%-10s  %-20s%-30s %-20s", "Amount ", "Transaction Type", "Date & Time", "Balance")
 					+ "\n--------------------------------------------------------------------------\n");
@@ -41,8 +45,11 @@ public class PaymentWalletRepoImpl implements IPaymentRepo {
 		if (customerMap.get(customer.getMobileNumber()) != null) {
 			customer.setWalletBalance(customer.getWalletBalance().add(depositableAmount));
 			StringBuilder builder = new StringBuilder();
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy hh:mm a");
+			String strDate = sdf.format(date);
 			builder.append(String.format("\n" + "%-10s  %-20s%-30s %-1s", "\u20B9 " + depositableAmount, "Deposited",
-					LocalDateTime.now(), "\u20B9 " + customer.getWalletBalance()));
+					strDate, "\u20B9 " + customer.getWalletBalance()));
 			printingList.put(customer.getMobileNumber(), printingList.get(customer.getMobileNumber()).append(builder));
 		}
 	}
@@ -52,8 +59,12 @@ public class PaymentWalletRepoImpl implements IPaymentRepo {
 		if (customerMap.get(customer.getMobileNumber()) != null) {
 			customer.setWalletBalance(customer.getWalletBalance().subtract(withdrawableAmount));
 			StringBuilder builder = new StringBuilder();
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy hh:mm a");
+			String strDate = sdf.format(date);
+			
 			builder.append(String.format("\n" + "%-10s  %-20s%-30s %-1s", "\u20B9 " + withdrawableAmount, "Withdrawn",
-					LocalDateTime.now(), "\u20B9 " + customer.getWalletBalance()));
+					strDate, "\u20B9 " + customer.getWalletBalance()));
 			printingList.put(customer.getMobileNumber(), printingList.get(customer.getMobileNumber()).append(builder));
 		}
 	}
@@ -70,15 +81,18 @@ public class PaymentWalletRepoImpl implements IPaymentRepo {
 				sendCustomer.setWalletBalance(sendCustomer.getWalletBalance().subtract(transferAmount));
 				recCustomer.setWalletBalance(recCustomer.getWalletBalance().add(transferAmount));
 				StringBuilder builder = new StringBuilder();
+				Date date = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-yyyy hh:mm a");
+				String strDate = sdf.format(date);
 				builder.append(String.format("\n" + "%-10s  %-20s%-30s %-1s", "\u20B9  " + transferAmount,
-						"Trans.-> "+recCustomer.getMobileNumber(), LocalDateTime.now(), "\u20B9 " + sendCustomer.getWalletBalance()));
+						"Trans.-> "+recCustomer.getMobileNumber(), strDate, "\u20B9 " + sendCustomer.getWalletBalance()));
 				printingList.put(sendCustomer.getMobileNumber(),
 						printingList.get(sendCustomer.getMobileNumber()).append(builder));
 
 				// receiver printingList
 				StringBuilder recBuilder = new StringBuilder();
 				recBuilder.append(String.format("\n" + "%-10s  %-20s%-30s %-1s", "\u20B9  " + transferAmount,
-						"Trans.<- "+sendCustomer.getMobileNumber(), LocalDateTime.now(), "\u20B9 " + recCustomer.getWalletBalance()));
+						"Trans.<- " + sendCustomer.getMobileNumber(), strDate, "\u20B9 " + recCustomer.getWalletBalance()));
 				printingList.put(recCustomer.getMobileNumber(),
 						printingList.get(recCustomer.getMobileNumber()).append(recBuilder));
 			}
